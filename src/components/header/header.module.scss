@@ -1,0 +1,46 @@
+.header {
+	background-color: #ffffff;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 16px 24px;
+
+	&__content {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__info {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__title {
+		font-size: 20px;
+		font-weight: 600;
+		color: #1a1a1a;
+		margin: 0;
+	}
+
+	&__subtitle {
+		font-size: 13px;
+		color: #666;
+		margin-top: 2px;
+	}
+
+	&__logout {
+		padding: 8px 16px;
+		background-color: transparent;
+		color: #ef4444;
+		border: 1px solid #ef4444;
+		border-radius: 6px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		&:hover {
+			background-color: #fef2f2;
+		}
+	}
+}

@@ -1,46 +1,37 @@
+import { ErrorBoundary, Header, Main, Footer, Toast } from './components';
+import { AuthScreen } from './components/auth-screen/auth-screen';
+import { useAuth } from '@hooks/useAuth';
 import { useMessages } from '@hooks/useMessages';
 import { useToast } from '@hooks/useToast';
-import { validateEnv } from '@utils/validate-env';
-import { useEffect, useState } from 'react';
-import { ErrorBoundary, Footer, Header, Main, Toast } from './components';
 
 function App() {
-	const [envErrors, setEnvErrors] = useState<string[]>([]);
+	const { authData, isLoading, logout } = useAuth();
 	const { toasts, show, hide } = useToast();
-	const { messages, isLoading, send } = useMessages({
+
+	const {
+		messages,
+		isLoading: isSending,
+		send,
+	} = useMessages({
+		idInstance: authData?.idInstance || '',
+		apiTokenInstance: authData?.apiTokenInstance || '',
+		chatId: authData?.chatId || '',
 		onError: (message) => show(message, 'error'),
 	});
 
-	useEffect(() => {
-		const { isValid, errors } = validateEnv();
-		if (!isValid) {
-			setEnvErrors(errors);
-			errors.forEach((err) => show(err, 'error'));
-		}
-	}, [show]);
+	if (isLoading) {
+		return <div className='loading'>Загрузка...</div>;
+	}
 
-	if (envErrors.length > 0) {
-		return (
-			<div className='env-error'>
-				<h2>Ошибка конфигурации</h2>
-				<p>Заполните файл .env следующими переменными:</p>
-				<ul>
-					{envErrors.map((err) => (
-						<li key={err}>{err}</li>
-					))}
-				</ul>
-				<p>
-					Смотрите <code>.env.example</code> для справки.
-				</p>
-			</div>
-		);
+	if (!authData) {
+		return <AuthScreen />;
 	}
 
 	return (
 		<ErrorBoundary>
-			<Header />
+			<Header chatId={authData.chatId} onLogout={logout} />
 			<Main messages={messages} />
-			<Footer onSend={send} isLoading={isLoading} />
+			<Footer onSend={send} isLoading={isSending} />
 			<div className='toast-container'>
 				{toasts.map((toast) => (
 					<Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => hide(toast.id)} />

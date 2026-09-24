@@ -1,22 +1,17 @@
 import type { NotificationResponse, SendMessageResponse } from '../types/green-api';
 
-const ID_INSTANCE = import.meta.env.VITE_GREEN_API_ID_INSTANCE as string;
-const API_TOKEN = import.meta.env.VITE_GREEN_API_API_TOKEN as string;
-const BASE_URL = `https://api.green-api.com/waInstance${ID_INSTANCE}`;
-
-// Отправка сообщения
-export async function sendMessage(chatId: string, message: string): Promise<SendMessageResponse> {
-	const url = `${BASE_URL}/sendMessage/${API_TOKEN}`;
+export async function sendMessage(
+	idInstance: string,
+	apiTokenInstance: string,
+	chatId: string,
+	message: string,
+): Promise<SendMessageResponse> {
+	const url = `https://api.green-api.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
 
 	const response = await fetch(url, {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			chatId,
-			message,
-		}),
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ chatId, message }),
 	});
 
 	if (!response.ok) {
@@ -26,10 +21,11 @@ export async function sendMessage(chatId: string, message: string): Promise<Send
 	return response.json();
 }
 
-// Получение уведомления (polling)
-export async function receiveNotification(): Promise<NotificationResponse | null> {
-	const url = `${BASE_URL}/receiveNotification/${API_TOKEN}`;
-
+export async function receiveNotification(
+	idInstance: string,
+	apiTokenInstance: string,
+): Promise<NotificationResponse | null> {
+	const url = `https://api.green-api.com/waInstance${idInstance}/receiveNotification/${apiTokenInstance}`;
 	const response = await fetch(url);
 
 	if (!response.ok) {
@@ -37,8 +33,6 @@ export async function receiveNotification(): Promise<NotificationResponse | null
 	}
 
 	const data = await response.json();
-
-	// Если нет уведомлений, GREEN-API возвращает {"receiptId": 0, "body": null}
 	if (!data.body || data.receiptId === 0) {
 		return null;
 	}
@@ -46,10 +40,12 @@ export async function receiveNotification(): Promise<NotificationResponse | null
 	return data;
 }
 
-// Удаление уведомления (подтверждение получения)
-export async function deleteNotification(receiptId: number): Promise<void> {
-	const url = `${BASE_URL}/deleteNotification/${API_TOKEN}/${receiptId}`;
-
+export async function deleteNotification(
+	idInstance: string,
+	apiTokenInstance: string,
+	receiptId: number,
+): Promise<void> {
+	const url = `https://api.green-api.com/waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiptId}`;
 	const response = await fetch(url);
 
 	if (!response.ok) {

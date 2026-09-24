@@ -1,16 +1,17 @@
-import { deleteNotification, receiveNotification, sendMessage } from '@utils/green-api';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Message } from '../types/green-api';
+import { sendMessage, receiveNotification, deleteNotification } from '@utils/green-api';
 
-const CHAT_ID = import.meta.env.VITE_GREEN_API_CHAT_ID as string;
 const POLLING_INTERVAL = 3000;
 
 interface UseMessagesOptions {
+	idInstance: string;
+	apiTokenInstance: string;
+	chatId: string;
 	onError?: (message: string) => void;
 }
 
-export function useMessages(options: UseMessagesOptions = {}) {
-	const { onError } = options;
+export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: UseMessagesOptions) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const pollingIntervalRef = useRef<number | null>(null);
@@ -20,7 +21,7 @@ export function useMessages(options: UseMessagesOptions = {}) {
 		async (text: string) => {
 			setIsLoading(true);
 			try {
-				await sendMessage(CHAT_ID, text);
+				await sendMessage(idInstance, apiTokenInstance, chatId, text);
 
 				const newMessage: Message = {
 					id: `outgoing-${Date.now()}`,
@@ -37,17 +38,21 @@ export function useMessages(options: UseMessagesOptions = {}) {
 				setIsLoading(false);
 			}
 		},
-		[onError],
+		[idInstance, apiTokenInstance, chatId, onError],
 	);
 
 	const pollNotifications = useCallback(async () => {
 		try {
-			const notification = await receiveNotification();
+			const notification = await receiveNotification(idInstance, apiTokenInstance);
 
 			if (notification && notification.body.typeWebhook === 'incomingMessageReceived') {
-				const { messageData } = notification.body;
+				const { messageData, senderData } = notification.body;
 
-				if (messageData.typeMessage === 'textMessage' && messageData.textMessageData?.textMessage) {
+				if (
+					senderData.chatId === chatId &&
+					messageData.typeMessage === 'textMessage' &&
+					messageData.textMessageData?.textMessage
+				) {
 					const incomingMessage: Message = {
 						id: `incoming-${notification.receiptId}`,
 						text: messageData.textMessageData.textMessage,
@@ -58,27 +63,23 @@ export function useMessages(options: UseMessagesOptions = {}) {
 					setMessages((prev) => [...prev, incomingMessage]);
 				}
 
-				await deleteNotification(notification.receiptId);
+				await deleteNotification(idInstance, apiTokenInstance, notification.receiptId);
 			}
 
-			// Сбрасываем ошибку при успешном запросе
 			if (lastErrorRef.current) {
 				lastErrorRef.current = null;
 			}
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : 'Ошибка сети';
-
-			// Показываем ошибку только один раз, чтобы не спамить пользователя
 			if (lastErrorRef.current !== errorMessage) {
 				lastErrorRef.current = errorMessage;
-				onError?.(`Ошибка получения сообщений: ${errorMessage}`);
+				onError?.(`Ошибка получения: ${errorMessage}`);
 			}
 		}
-	}, [onError]);
+	}, [idInstance, apiTokenInstance, chatId, onError]);
 
 	useEffect(() => {
 		pollingIntervalRef.current = window.setInterval(pollNotifications, POLLING_INTERVAL);
-
 		return () => {
 			if (pollingIntervalRef.current) {
 				window.clearInterval(pollingIntervalRef.current);
@@ -86,9 +87,5 @@ export function useMessages(options: UseMessagesOptions = {}) {
 		};
 	}, [pollNotifications]);
 
-	return {
-		messages,
-		isLoading,
-		send,
-	};
+	return { messages, isLoading, send };
 }
