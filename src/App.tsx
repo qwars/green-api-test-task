@@ -1,11 +1,11 @@
-import { ErrorBoundary, Header, Main, Footer, Toast } from './components';
-import { AuthScreen } from './components/auth-screen/auth-screen';
+import { ErrorBoundary, Footer, Header, Main, Toast } from './components';
+import { AuthScreen } from './components/auth-screen';
 import { useAuth } from '@hooks/useAuth';
 import { useMessages } from '@hooks/useMessages';
 import { useToast } from '@hooks/useToast';
 
 function App() {
-	const { authData, isLoading, logout } = useAuth();
+	const { authData, isLoading, login, logout } = useAuth();
 	const { toasts, show, hide } = useToast();
 
 	const {
@@ -13,6 +13,7 @@ function App() {
 		isLoading: isSending,
 		send,
 	} = useMessages({
+		apiUrl: authData?.apiUrl || '',
 		idInstance: authData?.idInstance || '',
 		apiTokenInstance: authData?.apiTokenInstance || '',
 		chatId: authData?.chatId || '',
@@ -20,11 +21,11 @@ function App() {
 	});
 
 	if (isLoading) {
-		return <div className='loading'>Загрузка...</div>;
+		return <div className='loading-screen'>Загрузка...</div>;
 	}
 
 	if (!authData) {
-		return <AuthScreen />;
+		return <AuthScreen login={login} />;
 	}
 
 	return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { AuthData } from '../types/auth';
 
 const STORAGE_KEY = 'green-api-auth-data';
@@ -22,11 +22,16 @@ export function useAuth() {
 	}, []);
 
 	const login = useCallback((data: Omit<AuthData, 'chatId'>) => {
-		const cleanPhone = data.phoneNumber.replace(/\D/g, '');
-		const domain = data.messenger === 'max' ? '@max.ru' : '@c.us';
-		const chatId = `${cleanPhone}${domain}`;
+		const chatId = `10000000`;
 
-		const newAuthData: AuthData = { ...data, chatId };
+		const finalApiUrl = data.apiUrl;
+
+		const newAuthData: AuthData = {
+			...data,
+			apiUrl: finalApiUrl,
+			chatId,
+		};
+
 		setAuthData(newAuthData);
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(newAuthData));
 	}, []);

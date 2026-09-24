@@ -1,17 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { deleteNotification, receiveNotification, sendMessage } from '@utils/green-api';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Message } from '../types/green-api';
-import { sendMessage, receiveNotification, deleteNotification } from '@utils/green-api';
 
 const POLLING_INTERVAL = 3000;
 
 interface UseMessagesOptions {
+	apiUrl: string;
 	idInstance: string;
 	apiTokenInstance: string;
 	chatId: string;
 	onError?: (message: string) => void;
 }
 
-export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: UseMessagesOptions) {
+export function useMessages({ apiUrl, idInstance, apiTokenInstance, chatId, onError }: UseMessagesOptions) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const pollingIntervalRef = useRef<number | null>(null);
@@ -21,7 +22,7 @@ export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: U
 		async (text: string) => {
 			setIsLoading(true);
 			try {
-				await sendMessage(idInstance, apiTokenInstance, chatId, text);
+				await sendMessage(apiUrl, idInstance, apiTokenInstance, chatId, text);
 
 				const newMessage: Message = {
 					id: `outgoing-${Date.now()}`,
@@ -38,12 +39,12 @@ export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: U
 				setIsLoading(false);
 			}
 		},
-		[idInstance, apiTokenInstance, chatId, onError],
+		[apiUrl, idInstance, apiTokenInstance, chatId, onError],
 	);
 
 	const pollNotifications = useCallback(async () => {
 		try {
-			const notification = await receiveNotification(idInstance, apiTokenInstance);
+			const notification = await receiveNotification(apiUrl, idInstance, apiTokenInstance);
 
 			if (notification && notification.body.typeWebhook === 'incomingMessageReceived') {
 				const { messageData, senderData } = notification.body;
@@ -63,7 +64,7 @@ export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: U
 					setMessages((prev) => [...prev, incomingMessage]);
 				}
 
-				await deleteNotification(idInstance, apiTokenInstance, notification.receiptId);
+				await deleteNotification(apiUrl, idInstance, apiTokenInstance, notification.receiptId);
 			}
 
 			if (lastErrorRef.current) {
@@ -76,7 +77,7 @@ export function useMessages({ idInstance, apiTokenInstance, chatId, onError }: U
 				onError?.(`Ошибка получения: ${errorMessage}`);
 			}
 		}
-	}, [idInstance, apiTokenInstance, chatId, onError]);
+	}, [apiUrl, idInstance, apiTokenInstance, chatId, onError]);
 
 	useEffect(() => {
 		pollingIntervalRef.current = window.setInterval(pollNotifications, POLLING_INTERVAL);

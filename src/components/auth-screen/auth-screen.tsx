@@ -1,13 +1,17 @@
 import { useState, type FormEvent } from 'react';
-import { useAuth } from '@hooks/useAuth';
+import type { AuthData } from '../../types/auth';
 import styles from './auth-screen.module.scss';
 
-export const AuthScreen = () => {
-	const { login } = useAuth();
+interface AuthScreenProps {
+	login: (data: Omit<AuthData, 'chatId'>) => void;
+}
+
+export const AuthScreen = ({ login }: AuthScreenProps) => {
 	const [idInstance, setIdInstance] = useState('');
 	const [apiTokenInstance, setApiTokenInstance] = useState('');
+	const [apiUrl, setApiUrl] = useState('');
 	const [phoneNumber, setPhoneNumber] = useState('');
-	const [messenger, setMessenger] = useState<'whatsapp' | 'max'>('whatsapp');
+	const [messenger, setMessenger] = useState<'whatsapp' | 'max'>('max');
 	const [error, setError] = useState('');
 
 	const handleSubmit = (e: FormEvent) => {
@@ -15,13 +19,14 @@ export const AuthScreen = () => {
 		setError('');
 
 		if (!idInstance.trim() || !apiTokenInstance.trim() || !phoneNumber.trim()) {
-			setError('Пожалуйста, заполните все поля');
+			setError('Пожалуйста, заполните все обязательные поля');
 			return;
 		}
 
 		login({
 			idInstance: idInstance.trim(),
 			apiTokenInstance: apiTokenInstance.trim(),
+			apiUrl: apiUrl.trim() || '',
 			phoneNumber: phoneNumber.trim(),
 			messenger,
 		});
@@ -31,11 +36,22 @@ export const AuthScreen = () => {
 		<div className={styles.authScreen}>
 			<div className={styles.authCard}>
 				<h1 className={styles.title}>Вход в Green-API Chat</h1>
-				<p className={styles.subtitle}>Введите данные из личного кабинета GREEN-API</p>
+				<p className={styles.subtitle}>Введите данные из личного кабинета</p>
 
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<div className={styles.field}>
-						<label htmlFor='idInstance'>ID Instance</label>
+						<label htmlFor='apiUrl'>API URL</label>
+						<input
+							id='apiUrl'
+							type='text'
+							value={apiUrl}
+							onChange={(e) => setApiUrl(e.target.value)}
+							placeholder='https://api.green-api.com'
+						/>
+					</div>
+
+					<div className={styles.field}>
+						<label htmlFor='idInstance'>ID Instance *</label>
 						<input
 							id='idInstance'
 							type='text'
@@ -47,7 +63,7 @@ export const AuthScreen = () => {
 					</div>
 
 					<div className={styles.field}>
-						<label htmlFor='apiTokenInstance'>API Token Instance</label>
+						<label htmlFor='apiTokenInstance'>API Token Instance *</label>
 						<input
 							id='apiTokenInstance'
 							type='password'
@@ -71,7 +87,7 @@ export const AuthScreen = () => {
 					</div>
 
 					<div className={styles.field}>
-						<label htmlFor='phoneNumber'>Номер телефона получателя</label>
+						<label htmlFor='phoneNumber'>Номер телефона получателя *</label>
 						<input
 							id='phoneNumber'
 							type='tel'
@@ -79,10 +95,6 @@ export const AuthScreen = () => {
 							onChange={(e) => setPhoneNumber(e.target.value)}
 							placeholder='79991234567'
 						/>
-						<span className={styles.hint}>
-							Будет преобразован в формат: {phoneNumber.replace(/\D/g, '') || 'номер'}
-							{messenger === 'max' ? '@max.ru' : '@c.us'}
-						</span>
 					</div>
 
 					{error && <div className={styles.error}>{error}</div>}
