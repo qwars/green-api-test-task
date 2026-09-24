@@ -1,0 +1,5 @@
+node_modules
+publick
+config/
+temp
+*.js

@@ -1,0 +1,87 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recess-order"
+  ],
+  "customSyntax": "postcss-styled-syntax",
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "order/order": [
+      "custom-properties",
+      "declarations"
+    ],
+    "order/properties-order": [
+      {
+        "properties": [
+          "position",
+          "top",
+          "right",
+          "bottom",
+          "left"
+        ]
+      },
+      {
+        "properties": [
+          "display",
+          "flex-direction",
+          "align-items",
+          "justify-content"
+        ]
+      },
+      {
+        "properties": [
+          "width",
+          "height",
+          "margin",
+          "padding"
+        ]
+      },
+      {
+        "properties": [
+          "background",
+          "background-color",
+          "background-image"
+        ]
+      },
+      {
+        "properties": [
+          "color",
+          "font-size",
+          "font-weight",
+          "line-height",
+          "text-align"
+        ]
+      },
+      {
+        "properties": [
+          "border",
+          "border-radius"
+        ]
+      },
+      {
+        "properties": [
+          "opacity",
+          "visibility"
+        ]
+      },
+      {
+        "properties": [
+          "transition",
+          "transition-property",
+          "transition-duration",
+          "transition-timing-function"
+        ]
+      },
+      {
+        "properties": [
+          "transform",
+          "cursor"
+        ]
+      }
+    ],
+    "declaration-property-value-no-unknown": true,
+    "no-empty-source": true
+  }
+}

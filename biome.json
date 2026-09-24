@@ -1,0 +1,254 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+	"vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+	"files": { "includes": ["**", "!!**/dist"] },
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineEnding": "lf",
+		"lineWidth": 120,
+		"attributePosition": "auto",
+		"bracketSameLine": false,
+		"bracketSpacing": true,
+		"expand": "auto",
+		"useEditorconfig": true,
+		"includes": ["src/**/*.{js,jsx,ts,tsx,json}"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": false,
+			"complexity": {
+				"noAdjacentSpacesInRegex": "error",
+				"noExtraBooleanCast": "error",
+				"noUselessCatch": "error",
+				"noUselessEscapeInRegex": "error",
+				"noUselessTypeConstraint": "error"
+			},
+			"correctness": {
+				"noConstAssign": "error",
+				"noConstantCondition": "error",
+				"noEmptyCharacterClassInRegex": "error",
+				"noEmptyPattern": "error",
+				"noGlobalObjectCalls": "error",
+				"noInvalidBuiltinInstantiation": "error",
+				"noInvalidConstructorSuper": "error",
+				"noNonoctalDecimalEscape": "error",
+				"noPrecisionLoss": "error",
+				"noSelfAssign": "error",
+				"noSetterReturn": "error",
+				"noSwitchDeclarations": "error",
+				"noUndeclaredVariables": "error",
+				"noUnreachable": "error",
+				"noUnreachableSuper": "error",
+				"noUnsafeFinally": "error",
+				"noUnsafeOptionalChaining": "error",
+				"noUnusedLabels": "error",
+				"noUnusedPrivateClassMembers": "error",
+				"noUnusedVariables": "error",
+				"useIsNan": "error",
+				"useValidForDirection": "error",
+				"useValidTypeof": "error",
+				"useYield": "error"
+			},
+			"style": {
+				"noCommonJs": "error",
+				"noNamespace": "error",
+				"useArrayLiterals": "error",
+				"useAsConstAssertion": "error"
+			},
+			"suspicious": {
+				"noAsyncPromiseExecutor": "error",
+				"noCatchAssign": "error",
+				"noClassAssign": "error",
+				"noCompareNegZero": "error",
+				"noConstantBinaryExpressions": "error",
+				"noControlCharactersInRegex": "error",
+				"noDebugger": "error",
+				"noDuplicateCase": "error",
+				"noDuplicateClassMembers": "error",
+				"noDuplicateElseIf": "error",
+				"noDuplicateObjectKeys": "error",
+				"noDuplicateParameters": "error",
+				"noEmptyBlockStatements": "error",
+				"noExplicitAny": "error",
+				"noExtraNonNullAssertion": "error",
+				"noFallthroughSwitchClause": "error",
+				"noFunctionAssign": "error",
+				"noGlobalAssign": "error",
+				"noImportAssign": "error",
+				"noIrregularWhitespace": "error",
+				"noMisleadingCharacterClass": "error",
+				"noMisleadingInstantiator": "error",
+				"noNonNullAssertedOptionalChain": "error",
+				"noPrototypeBuiltins": "error",
+				"noRedeclare": "error",
+				"noShadowRestrictedNames": "error",
+				"noSparseArray": "error",
+				"noUnassignedVariables": "error",
+				"noUnsafeDeclarationMerging": "error",
+				"noUnsafeNegation": "error",
+				"noUselessRegexBackrefs": "error",
+				"noWith": "error",
+				"useAwait": "error",
+				"useGetterReturn": "error",
+				"useNamespaceKeyword": "error"
+			}
+		},
+		"includes": ["**", "!**/node_modules/**", "!**/shared/api/**", "!**/mock-data/**", "!**/webpack.config.js"]
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "single",
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "all",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"bracketSameLine": false,
+			"quoteStyle": "single",
+			"attributePosition": "auto",
+			"bracketSpacing": true
+		}
+	},
+	"html": { "formatter": { "indentScriptAndStyle": false, "selfCloseVoidElements": "always" } },
+	"overrides": [
+		{
+			"includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+			"linter": {
+				"rules": {
+					"complexity": { "noArguments": "error" },
+					"correctness": {
+						"noConstAssign": "off",
+						"noGlobalObjectCalls": "off",
+						"noInvalidBuiltinInstantiation": "off",
+						"noInvalidConstructorSuper": "off",
+						"noSetterReturn": "off",
+						"noUndeclaredVariables": "off",
+						"noUnreachable": "off",
+						"noUnreachableSuper": "off"
+					},
+					"style": { "useConst": "error" },
+					"suspicious": {
+						"noClassAssign": "off",
+						"noDuplicateClassMembers": "off",
+						"noDuplicateObjectKeys": "off",
+						"noDuplicateParameters": "off",
+						"noFunctionAssign": "off",
+						"noImportAssign": "off",
+						"noRedeclare": "off",
+						"noUnsafeNegation": "off",
+						"noVar": "error",
+						"noWith": "off",
+						"useGetterReturn": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+			"linter": {
+				"rules": {
+					"complexity": { "noArguments": "error" },
+					"correctness": {
+						"noConstAssign": "off",
+						"noGlobalObjectCalls": "off",
+						"noInvalidBuiltinInstantiation": "off",
+						"noInvalidConstructorSuper": "off",
+						"noSetterReturn": "off",
+						"noUndeclaredVariables": "off",
+						"noUnreachable": "off",
+						"noUnreachableSuper": "off"
+					},
+					"style": { "useConst": "error" },
+					"suspicious": {
+						"noClassAssign": "off",
+						"noDuplicateClassMembers": "off",
+						"noDuplicateObjectKeys": "off",
+						"noDuplicateParameters": "off",
+						"noFunctionAssign": "off",
+						"noImportAssign": "off",
+						"noRedeclare": "off",
+						"noUnsafeNegation": "off",
+						"noVar": "error",
+						"noWith": "off",
+						"useGetterReturn": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/*.{js,jsx,ts,tsx}"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"noAccessKey": "error",
+						"noAriaUnsupportedElements": "error",
+						"noAutofocus": "error",
+						"noDistractingElements": "error",
+						"noHeaderScope": "error",
+						"noInteractiveElementToNoninteractiveRole": "error",
+						"noLabelWithoutControl": "error",
+						"noNoninteractiveElementInteractions": "off",
+						"noNoninteractiveElementToInteractiveRole": "off",
+						"noNoninteractiveTabindex": "error",
+						"noPositiveTabindex": "error",
+						"noRedundantAlt": "error",
+						"noRedundantRoles": "error",
+						"noStaticElementInteractions": "error",
+						"useAltText": "error",
+						"useAnchorContent": "error",
+						"useAriaActivedescendantWithTabindex": "error",
+						"useAriaPropsForRole": "error",
+						"useAriaPropsSupportedByRole": "error",
+						"useFocusableInteractive": "error",
+						"useHeadingContent": "error",
+						"useHtmlLang": "error",
+						"useIframeTitle": "error",
+						"useKeyWithClickEvents": "off",
+						"useKeyWithMouseEvents": "error",
+						"useMediaCaption": "error",
+						"useValidAnchor": "off",
+						"useValidAriaProps": "error",
+						"useValidAriaRole": "error",
+						"useValidAriaValues": "error",
+						"useValidAutocomplete": "error",
+						"useButtonType": "off"
+					},
+					"correctness": {
+						"noChildrenProp": "error",
+						"useExhaustiveDependencies": "warn",
+						"useHookAtTopLevel": "error",
+						"useJsxKeyInIterable": "error"
+					},
+					"security": { "noDangerouslySetInnerHtml": "off", "noDangerouslySetInnerHtmlWithChildren": "error" },
+					"suspicious": {
+						"noArrayIndexKey": "off",
+						"noCommentText": "error",
+						"noConsole": { "level": "warn", "options": { "allow": ["warn", "error", "info"] } },
+						"noDuplicateJsxProps": "error"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["develop/widgets/indexed-db/**/*.ts", "develop/widgets/indexed-db/**/*.tsx"],
+			"linter": { "rules": { "suspicious": { "noExplicitAny": "off", "noPrototypeBuiltins": "off" } } }
+		},
+		{
+			"includes": ["**/*.d.ts"],
+			"javascript": { "globals": [] },
+			"linter": {
+				"rules": {
+					"complexity": { "useLiteralKeys": "off", "useOptionalChain": "off" },
+					"style": { "useReadonlyClassProperties": "off" },
+					"suspicious": { "useAwait": "off" }
+				}
+			}
+		},
+		{ "includes": ["**/*.styled.ts"], "linter": { "rules": {} } },
+		{ "includes": ["**/*.{js,jsx,ts,tsx}"] }
+	],
+	"assist": { "enabled": true, "actions": { "source": { "organizeImports": "on" } } }
+}

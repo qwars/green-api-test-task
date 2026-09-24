@@ -1,0 +1,33 @@
+# Project
+node_modules/
+build/
+config/
+packages/
+assets
+assets/**/temp-*/*
+
+.*
+*.log
+*.sh
+*.tsbuildinfo
+*.gz
+yarn.lock
+
+# Images
+*.svg
+*.jpg
+*.png
+*.cur
+*.ico
+
+# markdown
+*.md
+
+*.map
+
+temp
+temp-*
+
+./*.js
+**/vtb-ib*
+dist/*

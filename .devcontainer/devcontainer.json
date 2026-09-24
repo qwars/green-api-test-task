@@ -1,0 +1,19 @@
+{
+    "name": "green-api-application",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "green-api",
+    "workspaceFolder": "/usr/src/application",
+    "remoteUser": "node",
+    "remoteEnv": {
+        "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "biomejs.biome",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "postCreateCommand": "yarn install"
+}

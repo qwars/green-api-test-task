@@ -1,0 +1,23 @@
+services:
+  green-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: green-api-application:latest
+    container_name: green-api-dev
+    working_dir: /usr/src/application
+    init: true
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_ENV=development
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      - VITE_GREEN_API_ID_INSTANCE=${VITE_GREEN_API_ID_INSTANCE}
+      - VITE_GREEN_API_API_TOKEN=${VITE_GREEN_API_API_TOKEN}
+      - VITE_GREEN_API_CHAT_ID=${VITE_GREEN_API_CHAT_ID}
+    volumes:
+      - .:/usr/src/application:cached
+      - /usr/src/application/node_modules
+    ports:
+      - '3000:3000'
+    command: sh -c "yarn start --host 0.0.0.0 --port 3000"
